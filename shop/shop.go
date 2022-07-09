@@ -9,7 +9,8 @@ import (
 )
 
 type Shop struct {
-	Storage domain.Storage
+	Storage    domain.Storage
+	Discounter domain.Discounter
 }
 
 func (shop *Shop) Get(
@@ -49,10 +50,18 @@ func (shop *Shop) Get(
 			return result, fmt.Errorf("failed to unmarshal product, %w", err)
 		}
 
-		result[idx] = domain.Offer{
+		offer := domain.Offer{
 			Product: product,
 			Final:   product.Price,
 		}
+
+		if shop.Discounter != nil {
+			discount := shop.Discounter.Calc(product)
+			offer.Final = discount.Price
+			offer.Discount = discount.Value
+		}
+
+		result[idx] = offer
 	}
 
 	return result, nil

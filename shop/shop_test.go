@@ -16,10 +16,11 @@ func TestShop_Get(t *testing.T) {
 	}
 
 	tests := []struct {
-		name    string
-		args    args
-		want    [5]domain.Offer
-		wantErr bool
+		name       string
+		args       args
+		discounter domain.Discounter
+		want       [5]domain.Offer
+		wantErr    bool
 	}{
 		{
 			name: "optimistic, get all products",
@@ -73,8 +74,9 @@ func TestShop_Get(t *testing.T) {
 			},
 		},
 		{
-			name: "get all products and apply the discount",
-			args: args{ctx: context.Background()},
+			name:       "get all products and apply the discount",
+			args:       args{ctx: context.Background()},
+			discounter: &Discount{},
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
@@ -153,6 +155,7 @@ func TestShop_Get(t *testing.T) {
 					PriceLessThan: 72000,
 				},
 			},
+			discounter: &Discount{},
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
@@ -172,6 +175,7 @@ func TestShop_Get(t *testing.T) {
 				ctx: context.Background(),
 				req: domain.Request{Category: "boots"},
 			},
+			discounter: &Discount{},
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
@@ -276,7 +280,7 @@ func TestShop_Get(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			shop := shopInit()
+			shop := shopInit(tt.discounter)
 
 			got, err := shop.Get(tt.args.ctx, tt.args.req)
 			if (err != nil) != tt.wantErr {
@@ -285,17 +289,14 @@ func TestShop_Get(t *testing.T) {
 			}
 
 			assert.Equal(t, tt.want, got)
-			// if !reflect.DeepEqual(got, tt.want) {
-			// 	t.Errorf("Shop.Get() = %v, want %v", got, tt.want)
-			// }
 		})
 	}
 }
 
-func shopInit() *Shop {
+func shopInit(discounter domain.Discounter) *Shop {
 	ctx := context.Background()
 	store := storage.New()
-	shop := &Shop{Storage: store}
+	shop := &Shop{Storage: store, Discounter: discounter}
 
 	shop.Add(ctx, domain.Product{
 		SKU:      "000001",

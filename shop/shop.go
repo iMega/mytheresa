@@ -35,7 +35,9 @@ func (shop *Shop) Get(
 		return result, nil
 	}
 
-	for idx, sku := range skus {
+	idx := 0
+
+	for _, sku := range skus {
 		if isLimitOffers(idx) {
 			break
 		}
@@ -50,6 +52,10 @@ func (shop *Shop) Get(
 			return result, fmt.Errorf("failed to unmarshal product, %w", err)
 		}
 
+		if !isPriceLessThan(product, req.PriceLessThan) {
+			continue
+		}
+
 		offer := domain.Offer{
 			Product: product,
 			Final:   product.Price,
@@ -62,6 +68,8 @@ func (shop *Shop) Get(
 		}
 
 		result[idx] = offer
+
+		idx++
 	}
 
 	return result, nil
@@ -98,4 +106,12 @@ const limitOffers = 5
 
 func isLimitOffers(idx int) bool {
 	return idx == limitOffers
+}
+
+func isPriceLessThan(product domain.Product, than uint64) bool {
+	if than == 0 {
+		return true
+	}
+
+	return product.Price.Units <= than
 }

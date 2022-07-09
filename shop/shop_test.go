@@ -245,6 +245,13 @@ func TestShop_Get(t *testing.T) {
 		},
 		{
 			name: "get products filtered by priceLessThan 800 euro",
+			args: args{
+				ctx: context.Background(),
+				req: domain.Request{
+					PriceLessThan: 80000,
+				},
+			},
+			discounter: &Discount{},
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{

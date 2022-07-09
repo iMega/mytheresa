@@ -1,5 +1,7 @@
 package domain
 
+import "context"
+
 // Catalog looks like any regular shop.
 type Catalog []Category
 
@@ -20,4 +22,25 @@ type Product struct {
 type Money struct {
 	Currency string
 	Units    uint64
+}
+
+// Shop is an interface and is a behavior store.
+type Shop interface {
+	Get(context.Context, Request) [5]Offer
+}
+
+// Request helps filter products.
+type Request struct {
+	// Can be filtered by category.
+	Category string
+
+	// Can be filtered by priceLessThan.
+	PriceLessThan uint64
+}
+
+// Offer - the current price of the item.
+type Offer struct {
+	Product  Product
+	Final    Money
+	Discount string
 }

@@ -24,7 +24,10 @@ func (storage *Storage) Get(
 ) (domain.Value, error) {
 	data, ok := storage.Store[string(key)]
 	if !ok {
-		return nil, fmt.Errorf("product does not exists")
+		return nil, fmt.Errorf(
+			"product does not exists, %w",
+			domain.ErrKeyDoesNotExists,
+		)
 	}
 
 	return data, nil

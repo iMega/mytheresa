@@ -18,11 +18,25 @@ type Category struct {
 	Products []Product
 }
 
+const ProductKey = "product"
+
 // Product is a item of catalog any shop.
 type Product struct {
 	Name  string
 	SKU   string
 	Price Money
+}
+
+func (p *Product) GetKey() Key {
+	return Key(ProductKey + p.SKU)
+}
+
+func (p *Product) MarshalJSON() ([]byte, error) {
+	return []byte{}, nil
+}
+
+func (p *Product) UnmarshalJSON(b []byte) error {
+	return nil
 }
 
 // Money represents an amount of money with its currency type.

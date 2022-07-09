@@ -1,6 +1,8 @@
 package domain
 
-import "context"
+import (
+	"context"
+)
 
 // Catalog looks like any regular shop.
 type Catalog []Category
@@ -27,6 +29,7 @@ type Money struct {
 // Shop is an interface and is a behavior store.
 type Shop interface {
 	Get(context.Context, Request) [5]Offer
+	Add(context.Context, Product) error
 }
 
 // Request helps filter products.

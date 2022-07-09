@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/imega/mytheresa/domain"
+	"github.com/imega/mytheresa/storage"
 )
 
 func TestShop_Get(t *testing.T) {
@@ -16,7 +17,6 @@ func TestShop_Get(t *testing.T) {
 
 	tests := []struct {
 		name string
-		shop *Shop
 		args args
 		want [5]domain.Offer
 	}{
@@ -254,7 +254,7 @@ func TestShop_Get(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			shop := &Shop{}
+			shop := shopInit()
 
 			got := shop.Get(tt.args.ctx, tt.args.req)
 			if !reflect.DeepEqual(got, tt.want) {
@@ -262,4 +262,42 @@ func TestShop_Get(t *testing.T) {
 			}
 		})
 	}
+}
+
+func shopInit() *Shop {
+	ctx := context.Background()
+	store := storage.New()
+	shop := &Shop{Storage: store}
+
+	shop.Add(ctx, domain.Product{
+		SKU:   "000001",
+		Name:  "BV Lean leather ankle boots",
+		Price: domain.Money{Currency: "EUR", Units: 89000},
+	})
+
+	shop.Add(ctx, domain.Product{
+		SKU:   "000002",
+		Name:  "BV Lean leather ankle boots",
+		Price: domain.Money{Currency: "EUR", Units: 99000},
+	})
+
+	shop.Add(ctx, domain.Product{
+		SKU:   "000003",
+		Name:  "Ashlington leather ankle boots",
+		Price: domain.Money{Currency: "EUR", Units: 71000},
+	})
+
+	shop.Add(ctx, domain.Product{
+		SKU:   "000004",
+		Name:  "Naima embellished suede sandals",
+		Price: domain.Money{Currency: "EUR", Units: 79500},
+	})
+
+	shop.Add(ctx, domain.Product{
+		SKU:   "000005",
+		Name:  "Nathane leather sneakers",
+		Price: domain.Money{Currency: "EUR", Units: 59000},
+	})
+
+	return shop
 }

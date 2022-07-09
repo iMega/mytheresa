@@ -53,11 +53,13 @@ type Offer struct {
 	Discount string
 }
 
+// Discount.
 type Discount struct {
 	Price Money
 	Value string
 }
 
+// Discounter will calc discount.
 type Discounter interface {
 	Calc(Product) Discount
 }

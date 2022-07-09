@@ -31,14 +31,6 @@ func (p *Product) GetKey() Key {
 	return Key(ProductKey + p.SKU)
 }
 
-func (p *Product) MarshalJSON() ([]byte, error) {
-	return []byte{}, nil
-}
-
-func (p *Product) UnmarshalJSON(b []byte) error {
-	return nil
-}
-
 // Money represents an amount of money with its currency type.
 type Money struct {
 	Currency string
@@ -47,7 +39,7 @@ type Money struct {
 
 // Shop is an interface and is a behavior store.
 type Shop interface {
-	Get(context.Context, Request) [5]Offer
+	Get(context.Context, Request) ([5]Offer, error)
 	Add(context.Context, Product) error
 }
 

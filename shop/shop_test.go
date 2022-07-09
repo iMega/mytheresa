@@ -16,9 +16,10 @@ func TestShop_Get(t *testing.T) {
 	}
 
 	tests := []struct {
-		name string
-		args args
-		want [5]domain.Offer
+		name    string
+		args    args
+		want    [5]domain.Offer
+		wantErr bool
 	}{
 		{
 			name: "optimistic, get all products",
@@ -191,7 +192,7 @@ func TestShop_Get(t *testing.T) {
 		},
 		{
 			name: `The 30% discount does not apply to boots.
-            The product with sku=000003 has a 15% discount`,
+		    The product with sku=000003 has a 15% discount`,
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
@@ -256,7 +257,12 @@ func TestShop_Get(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			shop := shopInit()
 
-			got := shop.Get(tt.args.ctx, tt.args.req)
+			got, err := shop.Get(tt.args.ctx, tt.args.req)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Shop.Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("Shop.Get() = %v, want %v", got, tt.want)
 			}

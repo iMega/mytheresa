@@ -76,7 +76,7 @@ func TestShop_Get(t *testing.T) {
 		{
 			name:       "get all products and apply the discount",
 			args:       args{ctx: context.Background()},
-			discounter: &Discount{},
+			discounter: &Discount{WithDiscount30: true, WithDiscount15: true},
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
@@ -155,7 +155,7 @@ func TestShop_Get(t *testing.T) {
 					PriceLessThan: 72000,
 				},
 			},
-			discounter: &Discount{},
+			discounter: &Discount{WithDiscount30: true, WithDiscount15: true},
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
@@ -175,7 +175,7 @@ func TestShop_Get(t *testing.T) {
 				ctx: context.Background(),
 				req: domain.Request{Category: "boots"},
 			},
-			discounter: &Discount{},
+			discounter: &Discount{WithDiscount30: true, WithDiscount15: true},
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
@@ -212,6 +212,11 @@ func TestShop_Get(t *testing.T) {
 		{
 			name: `The 30% discount does not apply to boots.
 		    The product with sku=000003 has a 15% discount`,
+			args: args{
+				ctx: context.Background(),
+				req: domain.Request{Category: "boots"},
+			},
+			discounter: &Discount{WithDiscount15: true},
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
@@ -251,7 +256,7 @@ func TestShop_Get(t *testing.T) {
 					PriceLessThan: 80000,
 				},
 			},
-			discounter: &Discount{},
+			discounter: &Discount{WithDiscount30: true, WithDiscount15: true},
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{

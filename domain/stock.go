@@ -4,27 +4,21 @@ import (
 	"context"
 )
 
-// Catalog looks like any regular shop.
-type Catalog []Category
+const (
+	RootNodeKey = "root"
+	CategoryKey = "category"
+	ProductKey  = "product"
+)
 
-const RootNodeKey = "root"
-
-// RootNode contains all SKUs of products.
-type RootNode []string
-
-// Category is a item of catalog and it can contains any products.
-type Category struct {
-	Name     string
-	Products []Product
-}
-
-const ProductKey = "product"
+// Node contains SKUs of products.
+type Node []string
 
 // Product is a item of catalog any shop.
 type Product struct {
-	Name  string
-	SKU   string
-	Price Money
+	Name     string
+	SKU      string
+	Category string
+	Price    Money
 }
 
 func (p *Product) GetKey() Key {

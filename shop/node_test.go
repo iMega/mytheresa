@@ -9,7 +9,7 @@ import (
 	"github.com/imega/mytheresa/storage"
 )
 
-func TestRootNode_GetSKUs(t *testing.T) {
+func TestNode_GetSKUs(t *testing.T) {
 	type fields struct {
 		Storage func() domain.Storage
 	}
@@ -54,23 +54,24 @@ func TestRootNode_GetSKUs(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			node := &RootNode{
+			node := &Node{
 				Storage: tt.fields.Storage(),
 			}
 			got, err := node.GetSKUs(tt.args.ctx)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("RootNode.GetSKUs() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Node.GetSKUs() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("RootNode.GetSKUs() = %v, want %v", got, tt.want)
+				t.Errorf("Node.GetSKUs() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestRootNode_AddSKU(t *testing.T) {
+func TestNode_AddSKU(t *testing.T) {
 	type fields struct {
+		Key     domain.Key
 		Storage func() domain.Storage
 	}
 	type args struct {
@@ -87,6 +88,7 @@ func TestRootNode_AddSKU(t *testing.T) {
 		{
 			name: "storage is empty",
 			fields: fields{
+				Key: domain.RootNodeKey,
 				Storage: func() domain.Storage {
 					return storage.New()
 				},
@@ -100,6 +102,7 @@ func TestRootNode_AddSKU(t *testing.T) {
 		{
 			name: "storage contains one sku",
 			fields: fields{
+				Key: domain.RootNodeKey,
 				Storage: func() domain.Storage {
 					s := storage.New()
 					s.Set(
@@ -120,19 +123,20 @@ func TestRootNode_AddSKU(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			node := &RootNode{
+			node := &Node{
+				Key:     tt.fields.Key,
 				Storage: tt.fields.Storage(),
 			}
 			if err := node.AddSKU(tt.args.ctx, tt.args.sku); (err != nil) != tt.wantErr {
-				t.Errorf("RootNode.AddSKU() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Node.AddSKU() error = %v, wantErr %v", err, tt.wantErr)
 			}
 			got, err := node.GetSKUs(tt.args.ctx)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("RootNode.GetSKUs() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Node.GetSKUs() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("RootNode.GetSKUs() = %v, want %v", got, tt.want)
+				t.Errorf("Node.GetSKUs() = %v, want %v", got, tt.want)
 			}
 		})
 	}

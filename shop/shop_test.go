@@ -27,41 +27,46 @@ func TestShop_Get(t *testing.T) {
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
-						SKU:   "000001",
-						Name:  "BV Lean leather ankle boots",
-						Price: domain.Money{Currency: "EUR", Units: 89000},
+						SKU:      "000001",
+						Name:     "BV Lean leather ankle boots",
+						Category: "boots",
+						Price:    domain.Money{Currency: "EUR", Units: 89000},
 					},
 					Final: domain.Money{Currency: "EUR", Units: 89000},
 				},
 				{
 					Product: domain.Product{
-						SKU:   "000002",
-						Name:  "BV Lean leather ankle boots",
-						Price: domain.Money{Currency: "EUR", Units: 99000},
+						SKU:      "000002",
+						Name:     "BV Lean leather ankle boots",
+						Category: "boots",
+						Price:    domain.Money{Currency: "EUR", Units: 99000},
 					},
 					Final: domain.Money{Currency: "EUR", Units: 99000},
 				},
 				{
 					Product: domain.Product{
-						SKU:   "000003",
-						Name:  "Ashlington leather ankle boots",
-						Price: domain.Money{Currency: "EUR", Units: 71000},
+						SKU:      "000003",
+						Name:     "Ashlington leather ankle boots",
+						Category: "boots",
+						Price:    domain.Money{Currency: "EUR", Units: 71000},
 					},
 					Final: domain.Money{Currency: "EUR", Units: 71000},
 				},
 				{
 					Product: domain.Product{
-						SKU:   "000004",
-						Name:  "Naima embellished suede sandals",
-						Price: domain.Money{Currency: "EUR", Units: 79500},
+						SKU:      "000004",
+						Name:     "Naima embellished suede sandals",
+						Category: "sandals",
+						Price:    domain.Money{Currency: "EUR", Units: 79500},
 					},
 					Final: domain.Money{Currency: "EUR", Units: 79500},
 				},
 				{
 					Product: domain.Product{
-						SKU:   "000005",
-						Name:  "Nathane leather sneakers",
-						Price: domain.Money{Currency: "EUR", Units: 59000},
+						SKU:      "000005",
+						Name:     "Nathane leather sneakers",
+						Category: "sneakers",
+						Price:    domain.Money{Currency: "EUR", Units: 59000},
 					},
 					Final: domain.Money{Currency: "EUR", Units: 59000},
 				},
@@ -73,44 +78,49 @@ func TestShop_Get(t *testing.T) {
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
-						SKU:   "000001",
-						Name:  "BV Lean leather ankle boots",
-						Price: domain.Money{Currency: "EUR", Units: 89000},
+						SKU:      "000001",
+						Name:     "BV Lean leather ankle boots",
+						Category: "boots",
+						Price:    domain.Money{Currency: "EUR", Units: 89000},
 					},
 					Final:    domain.Money{Currency: "EUR", Units: 62300},
 					Discount: "30%",
 				},
 				{
 					Product: domain.Product{
-						SKU:   "000002",
-						Name:  "BV Lean leather ankle boots",
-						Price: domain.Money{Currency: "EUR", Units: 99000},
+						SKU:      "000002",
+						Name:     "BV Lean leather ankle boots",
+						Category: "boots",
+						Price:    domain.Money{Currency: "EUR", Units: 99000},
 					},
 					Final:    domain.Money{Currency: "EUR", Units: 69300},
 					Discount: "30%",
 				},
 				{
 					Product: domain.Product{
-						SKU:   "000003",
-						Name:  "Ashlington leather ankle boots",
-						Price: domain.Money{Currency: "EUR", Units: 71000},
+						SKU:      "000003",
+						Name:     "Ashlington leather ankle boots",
+						Category: "boots",
+						Price:    domain.Money{Currency: "EUR", Units: 71000},
 					},
 					Final:    domain.Money{Currency: "EUR", Units: 49700},
 					Discount: "30%",
 				},
 				{
 					Product: domain.Product{
-						SKU:   "000004",
-						Name:  "Naima embellished suede sandals",
-						Price: domain.Money{Currency: "EUR", Units: 79500},
+						SKU:      "000004",
+						Name:     "Naima embellished suede sandals",
+						Category: "sandals",
+						Price:    domain.Money{Currency: "EUR", Units: 79500},
 					},
 					Final: domain.Money{Currency: "EUR", Units: 79500},
 				},
 				{
 					Product: domain.Product{
-						SKU:   "000005",
-						Name:  "Nathane leather sneakers",
-						Price: domain.Money{Currency: "EUR", Units: 59000},
+						SKU:      "000005",
+						Name:     "Nathane leather sneakers",
+						Category: "sneakers",
+						Price:    domain.Money{Currency: "EUR", Units: 59000},
 					},
 					Final: domain.Money{Currency: "EUR", Units: 59000},
 				},
@@ -125,9 +135,10 @@ func TestShop_Get(t *testing.T) {
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
-						SKU:   "000005",
-						Name:  "Nathane leather sneakers",
-						Price: domain.Money{Currency: "EUR", Units: 59000},
+						SKU:      "000005",
+						Name:     "Nathane leather sneakers",
+						Category: "sneakers",
+						Price:    domain.Money{Currency: "EUR", Units: 59000},
 					},
 					Final: domain.Money{Currency: "EUR", Units: 59000},
 				},
@@ -145,9 +156,10 @@ func TestShop_Get(t *testing.T) {
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
-						SKU:   "000003",
-						Name:  "Ashlington leather ankle boots",
-						Price: domain.Money{Currency: "EUR", Units: 71000},
+						SKU:      "000003",
+						Name:     "Ashlington leather ankle boots",
+						Category: "boots",
+						Price:    domain.Money{Currency: "EUR", Units: 71000},
 					},
 					Final:    domain.Money{Currency: "EUR", Units: 49700},
 					Discount: "30%",
@@ -163,27 +175,30 @@ func TestShop_Get(t *testing.T) {
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
-						SKU:   "000001",
-						Name:  "BV Lean leather ankle boots",
-						Price: domain.Money{Currency: "EUR", Units: 89000},
+						SKU:      "000001",
+						Name:     "BV Lean leather ankle boots",
+						Category: "boots",
+						Price:    domain.Money{Currency: "EUR", Units: 89000},
 					},
 					Final:    domain.Money{Currency: "EUR", Units: 62300},
 					Discount: "30%",
 				},
 				{
 					Product: domain.Product{
-						SKU:   "000002",
-						Name:  "BV Lean leather ankle boots",
-						Price: domain.Money{Currency: "EUR", Units: 99000},
+						SKU:      "000002",
+						Name:     "BV Lean leather ankle boots",
+						Category: "boots",
+						Price:    domain.Money{Currency: "EUR", Units: 99000},
 					},
 					Final:    domain.Money{Currency: "EUR", Units: 69300},
 					Discount: "30%",
 				},
 				{
 					Product: domain.Product{
-						SKU:   "000003",
-						Name:  "Ashlington leather ankle boots",
-						Price: domain.Money{Currency: "EUR", Units: 71000},
+						SKU:      "000003",
+						Name:     "Ashlington leather ankle boots",
+						Category: "boots",
+						Price:    domain.Money{Currency: "EUR", Units: 71000},
 					},
 					Final:    domain.Money{Currency: "EUR", Units: 49700},
 					Discount: "30%",
@@ -196,25 +211,28 @@ func TestShop_Get(t *testing.T) {
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
-						SKU:   "000001",
-						Name:  "BV Lean leather ankle boots",
-						Price: domain.Money{Currency: "EUR", Units: 89000},
+						SKU:      "000001",
+						Name:     "BV Lean leather ankle boots",
+						Category: "boots",
+						Price:    domain.Money{Currency: "EUR", Units: 89000},
 					},
 					Final: domain.Money{Currency: "EUR", Units: 89000},
 				},
 				{
 					Product: domain.Product{
-						SKU:   "000002",
-						Name:  "BV Lean leather ankle boots",
-						Price: domain.Money{Currency: "EUR", Units: 99000},
+						SKU:      "000002",
+						Name:     "BV Lean leather ankle boots",
+						Category: "boots",
+						Price:    domain.Money{Currency: "EUR", Units: 99000},
 					},
 					Final: domain.Money{Currency: "EUR", Units: 99000},
 				},
 				{
 					Product: domain.Product{
-						SKU:   "000003",
-						Name:  "Ashlington leather ankle boots",
-						Price: domain.Money{Currency: "EUR", Units: 71000},
+						SKU:      "000003",
+						Name:     "Ashlington leather ankle boots",
+						Category: "boots",
+						Price:    domain.Money{Currency: "EUR", Units: 71000},
 					},
 					Final:    domain.Money{Currency: "EUR", Units: 60350},
 					Discount: "15%",
@@ -226,26 +244,29 @@ func TestShop_Get(t *testing.T) {
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
-						SKU:   "000003",
-						Name:  "Ashlington leather ankle boots",
-						Price: domain.Money{Currency: "EUR", Units: 71000},
+						SKU:      "000003",
+						Name:     "Ashlington leather ankle boots",
+						Category: "boots",
+						Price:    domain.Money{Currency: "EUR", Units: 71000},
 					},
 					Final:    domain.Money{Currency: "EUR", Units: 49700},
 					Discount: "30%",
 				},
 				{
 					Product: domain.Product{
-						SKU:   "000004",
-						Name:  "Naima embellished suede sandals",
-						Price: domain.Money{Currency: "EUR", Units: 79500},
+						SKU:      "000004",
+						Name:     "Naima embellished suede sandals",
+						Category: "sandals",
+						Price:    domain.Money{Currency: "EUR", Units: 79500},
 					},
 					Final: domain.Money{Currency: "EUR", Units: 79500},
 				},
 				{
 					Product: domain.Product{
-						SKU:   "000005",
-						Name:  "Nathane leather sneakers",
-						Price: domain.Money{Currency: "EUR", Units: 59000},
+						SKU:      "000005",
+						Name:     "Nathane leather sneakers",
+						Category: "sneakers",
+						Price:    domain.Money{Currency: "EUR", Units: 59000},
 					},
 					Final: domain.Money{Currency: "EUR", Units: 59000},
 				},
@@ -276,33 +297,45 @@ func shopInit() *Shop {
 	shop := &Shop{Storage: store}
 
 	shop.Add(ctx, domain.Product{
-		SKU:   "000001",
-		Name:  "BV Lean leather ankle boots",
-		Price: domain.Money{Currency: "EUR", Units: 89000},
+		SKU:      "000001",
+		Name:     "BV Lean leather ankle boots",
+		Category: "boots",
+		Price:    domain.Money{Currency: "EUR", Units: 89000},
 	})
 
 	shop.Add(ctx, domain.Product{
-		SKU:   "000002",
-		Name:  "BV Lean leather ankle boots",
-		Price: domain.Money{Currency: "EUR", Units: 99000},
+		SKU:      "000002",
+		Name:     "BV Lean leather ankle boots",
+		Category: "boots",
+		Price:    domain.Money{Currency: "EUR", Units: 99000},
 	})
 
 	shop.Add(ctx, domain.Product{
-		SKU:   "000003",
-		Name:  "Ashlington leather ankle boots",
-		Price: domain.Money{Currency: "EUR", Units: 71000},
+		SKU:      "000003",
+		Name:     "Ashlington leather ankle boots",
+		Category: "boots",
+		Price:    domain.Money{Currency: "EUR", Units: 71000},
 	})
 
 	shop.Add(ctx, domain.Product{
-		SKU:   "000004",
-		Name:  "Naima embellished suede sandals",
-		Price: domain.Money{Currency: "EUR", Units: 79500},
+		SKU:      "000004",
+		Name:     "Naima embellished suede sandals",
+		Category: "sandals",
+		Price:    domain.Money{Currency: "EUR", Units: 79500},
 	})
 
 	shop.Add(ctx, domain.Product{
-		SKU:   "000005",
-		Name:  "Nathane leather sneakers",
-		Price: domain.Money{Currency: "EUR", Units: 59000},
+		SKU:      "000005",
+		Name:     "Nathane leather sneakers",
+		Category: "sneakers",
+		Price:    domain.Money{Currency: "EUR", Units: 59000},
+	})
+
+	shop.Add(ctx, domain.Product{
+		SKU:      "000006",
+		Name:     "product over limit",
+		Category: "limit",
+		Price:    domain.Money{Currency: "EUR", Units: 99999999},
 	})
 
 	return shop

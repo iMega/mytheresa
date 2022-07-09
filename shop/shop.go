@@ -18,25 +18,28 @@ func (shop *Shop) Get(
 ) ([5]domain.Offer, error) {
 	result := [5]domain.Offer{}
 
-	var skus []string
+	key := domain.RootNodeKey
 	if req.Category != "" {
-		skus = []string{}
-	} else {
-		rootNode := &RootNode{Storage: shop.Storage}
-		res, err := rootNode.GetSKUs(ctx)
-		if err != nil {
-			return result, fmt.Errorf("failed to get skus, %w", err)
-		}
+		key = domain.CategoryKey + req.Category
+	}
 
-		skus = res
+	node := &Node{Storage: shop.Storage, Key: domain.Key(key)}
+
+	skus, err := node.GetSKUs(ctx)
+	if err != nil {
+		return result, fmt.Errorf("failed to get skus, %w", err)
 	}
 
 	if len(skus) == 0 {
 		return result, nil
 	}
 
-	for idx := 0; idx < 5; idx++ {
-		data, err := shop.Storage.Get(ctx, domain.Key(domain.ProductKey+skus[idx]))
+	for idx, sku := range skus {
+		if isLimitOffers(idx) {
+			break
+		}
+
+		data, err := shop.Storage.Get(ctx, domain.Key(domain.ProductKey+sku))
 		if err != nil {
 			return result, fmt.Errorf("failed to get product, %w", err)
 		}
@@ -56,9 +59,17 @@ func (shop *Shop) Get(
 }
 
 func (shop *Shop) Add(ctx context.Context, product domain.Product) error {
-	rootNode := &RootNode{Storage: shop.Storage}
+	rootNode := &Node{Storage: shop.Storage, Key: domain.RootNodeKey}
 	if err := rootNode.AddSKU(ctx, product.SKU); err != nil {
 		return fmt.Errorf("failed to add sku to rootNode, %w", err)
+	}
+
+	category := &Node{
+		Storage: shop.Storage,
+		Key:     domain.Key(domain.CategoryKey + product.Category),
+	}
+	if err := category.AddSKU(ctx, product.SKU); err != nil {
+		return fmt.Errorf("failed to add sku to category, %w", err)
 	}
 
 	data, err := json.Marshal(product)
@@ -72,4 +83,10 @@ func (shop *Shop) Add(ctx context.Context, product domain.Product) error {
 	}
 
 	return nil
+}
+
+const limitOffers = 5
+
+func isLimitOffers(idx int) bool {
+	return idx == limitOffers
 }

@@ -1,6 +1,11 @@
 package domain
 
-import "context"
+import (
+	"context"
+	"errors"
+)
+
+var ErrKeyDoesNotExists = errors.New("key does not exists")
 
 // Storage is an interface to store any entities.
 type Storage interface {

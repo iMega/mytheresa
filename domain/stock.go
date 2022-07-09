@@ -7,6 +7,11 @@ import (
 // Catalog looks like any regular shop.
 type Catalog []Category
 
+const RootNodeKey = "root"
+
+// RootNode contains all SKUs of products.
+type RootNode []string
+
 // Category is a item of catalog and it can contains any products.
 type Category struct {
 	Name     string

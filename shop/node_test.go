@@ -55,6 +55,7 @@ func TestNode_GetSKUs(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			node := &Node{
+				Key:     domain.RootNodeKey,
 				Storage: tt.fields.Storage(),
 			}
 			got, err := node.GetSKUs(tt.args.ctx)

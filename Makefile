@@ -8,6 +8,7 @@ unit:
 	@docker run --rm -v $(CURDIR):$(CWD) \
 		-w $(CWD) \
 		-e GOFLAGS=-mod=mod \
+		-e CGO_ENABLED=0 \
 		$(GO_IMG) \
 		sh -c 'go test -v `go list ./...`'
 

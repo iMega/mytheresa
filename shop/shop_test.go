@@ -2,11 +2,11 @@ package shop
 
 import (
 	"context"
-	"reflect"
 	"testing"
 
 	"github.com/imega/mytheresa/domain"
 	"github.com/imega/mytheresa/storage"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestShop_Get(t *testing.T) {
@@ -284,9 +284,10 @@ func TestShop_Get(t *testing.T) {
 				return
 			}
 
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Shop.Get() = %v, want %v", got, tt.want)
-			}
+			assert.Equal(t, tt.want, got)
+			// if !reflect.DeepEqual(got, tt.want) {
+			// 	t.Errorf("Shop.Get() = %v, want %v", got, tt.want)
+			// }
 		})
 	}
 }

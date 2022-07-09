@@ -8,7 +8,7 @@ import (
 	"github.com/imega/mytheresa/domain"
 )
 
-func TestGet(t *testing.T) {
+func TestShop_Get(t *testing.T) {
 	type args struct {
 		ctx context.Context
 		req domain.Request
@@ -16,6 +16,7 @@ func TestGet(t *testing.T) {
 
 	tests := []struct {
 		name string
+		shop *Shop
 		args args
 		want [5]domain.Offer
 	}{
@@ -44,9 +45,11 @@ func TestGet(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := Get(tt.args.ctx, tt.args.req)
+			shop := &Shop{}
+
+			got := shop.Get(tt.args.ctx, tt.args.req)
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Get() = %v, want %v", got, tt.want)
+				t.Errorf("Shop.Get() = %v, want %v", got, tt.want)
 			}
 		})
 	}

@@ -9,7 +9,7 @@ import (
 	"github.com/imega/mytheresa/domain"
 )
 
-// RootNode contains all SKUs
+// RootNode contains all SKUs.
 type RootNode struct {
 	Storage domain.Storage
 }

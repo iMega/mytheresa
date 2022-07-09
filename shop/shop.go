@@ -35,18 +35,18 @@ func (shop *Shop) Get(
 		return result, nil
 	}
 
-	for i := 0; i < 5; i++ {
-		data, err := shop.Storage.Get(ctx, domain.Key(domain.ProductKey+skus[i]))
+	for idx := 0; idx < 5; idx++ {
+		data, err := shop.Storage.Get(ctx, domain.Key(domain.ProductKey+skus[idx]))
 		if err != nil {
 			return result, fmt.Errorf("failed to get product, %w", err)
 		}
 
-		product := domain.Product{}
+		var product domain.Product
 		if err := json.Unmarshal(data, &product); err != nil {
 			return result, fmt.Errorf("failed to unmarshal product, %w", err)
 		}
 
-		result[i] = domain.Offer{
+		result[idx] = domain.Offer{
 			Product: product,
 			Final:   product.Price,
 		}

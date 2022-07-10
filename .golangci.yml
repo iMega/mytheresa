@@ -19,3 +19,4 @@ linters:
   disable:
     - exhaustivestruct
     - exhaustruct
+    - tagliatelle

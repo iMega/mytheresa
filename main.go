@@ -18,7 +18,7 @@ func main() {
 	}
 
 	http.HandleFunc("/products", handler.Products)
-	http.HandleFunc("/addproduct", handler.Products)
+	http.HandleFunc("/addproduct", handler.AddProduct)
 	http.HandleFunc("/healthcheck", handler.Healthcheck)
 
 	if err := http.ListenAndServe(":8080", nil); err != nil {
@@ -31,13 +31,13 @@ type Handler struct {
 }
 
 func (handler *Handler) Products(resp http.ResponseWriter, req *http.Request) {
-	//
+	log.Println("+++Products+++")
 }
 
 func (handler *Handler) AddProduct(resp http.ResponseWriter, req *http.Request) {
-	//
+	log.Println("+++AddProduct+++")
 }
 
 func (handler *Handler) Healthcheck(resp http.ResponseWriter, req *http.Request) {
-	resp.Write([]byte(`ok!`))
+	resp.WriteHeader(http.StatusNoContent)
 }

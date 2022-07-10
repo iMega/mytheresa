@@ -5,7 +5,7 @@ ENV GOFLAGS=-mod=mod
 ARG CWD
 WORKDIR $CWD
 COPY . .
-RUN go build -v -ldflags "-s -w" -o $CWD/app .
+RUN CGO_ENABLED=0 GOOS=linux go build -v -ldflags "-s -w" -o $CWD/app .
 
 
 FROM scratch

@@ -62,6 +62,10 @@ func (handler *Handler) Products(resp http.ResponseWriter, req *http.Request) {
 	respOffers := []Offer{}
 
 	for _, offer := range offers {
+		if offer.Product.SKU == "" {
+			continue
+		}
+
 		respOffer := Offer{
 			SKU:      offer.Product.SKU,
 			Name:     offer.Product.Name,

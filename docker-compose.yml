@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        - GO_IMG=${GO_IMG}
+        - CWD=${CWD}
+    working_dir: ${CWD}
+
+  acceptance:
+    image: ${GO_IMG}
+    environment:
+      - CGO_ENABLED=0
+      - GOFLAGS=
+    volumes:
+      - ./:${CWD}
+    working_dir: ${CWD}
+    command: >
+      /bin/sh -c 'go test -timeout 30m -v ${CWD}/tests'

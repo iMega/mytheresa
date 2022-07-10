@@ -8,6 +8,8 @@ const (
 	RootNodeKey = "root"
 	CategoryKey = "category"
 	ProductKey  = "product"
+	Base10      = 10
+	Bit64       = 64
 )
 
 // Node contains SKUs of products.

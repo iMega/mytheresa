@@ -103,11 +103,6 @@ func calc(
 	return node, nil
 }
 
-const (
-	base10 = 10
-	bit64  = 64
-)
-
 func expression(
 	requests map[string]interface{},
 	node *dtree.Tree,
@@ -123,7 +118,7 @@ func expression(
 	}
 
 	s := fmt.Sprintf("%.0f", result)
-	val, _ := strconv.ParseUint(s, base10, bit64)
+	val, _ := strconv.ParseUint(s, domain.Base10, domain.Bit64)
 
 	requests[node.Key] = val
 	requests["name"] = node.Name

@@ -99,7 +99,21 @@ func createStore() error {
 			return fmt.Errorf("failed to encode offer, %w", err)
 		}
 
-		http.DefaultClient.Post("http://app:8080/addproduct", "application/json", buf)
+		resp, err := http.DefaultClient.Post(
+			"http://app:8080/addproduct",
+			"application/json",
+			buf,
+		)
+		if err != nil {
+			return fmt.Errorf("failed to add product, %w", err)
+		}
+
+		if resp.StatusCode != http.StatusOK {
+			return fmt.Errorf(
+				"failed to add product, status code: %d",
+				resp.StatusCode,
+			)
+		}
 	}
 
 	return nil

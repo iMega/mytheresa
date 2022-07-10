@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/imega/mytheresa/domain"
@@ -18,7 +19,10 @@ func main() {
 
 	http.HandleFunc("/products", handler.Products)
 	http.HandleFunc("/addproduct", handler.Products)
-	http.ListenAndServe(":8080", nil)
+
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		log.Fatalf("failed to start http-server, %s", err.Error())
+	}
 }
 
 type Handler struct {

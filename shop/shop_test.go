@@ -77,7 +77,7 @@ func TestShop_Get(t *testing.T) {
 		{
 			name:       "get all products and apply the discount",
 			args:       args{ctx: context.Background()},
-			discounter: New(getRawLP()),
+			discounter: New(DefaultRulesLoyaltyProgram()),
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
@@ -156,7 +156,7 @@ func TestShop_Get(t *testing.T) {
 					PriceLessThan: 72000,
 				},
 			},
-			discounter: New(getRawLP()),
+			discounter: New(DefaultRulesLoyaltyProgram()),
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
@@ -176,7 +176,7 @@ func TestShop_Get(t *testing.T) {
 				ctx: context.Background(),
 				req: domain.Request{Category: "boots"},
 			},
-			discounter: New(getRawLP()),
+			discounter: New(DefaultRulesLoyaltyProgram()),
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
@@ -216,7 +216,7 @@ func TestShop_Get(t *testing.T) {
 				ctx: context.Background(),
 				req: domain.Request{Category: "otherCategory"},
 			},
-			discounter:         New(getRawLP()),
+			discounter:         New(DefaultRulesLoyaltyProgram()),
 			item000003Category: "otherCategory",
 			want: [5]domain.Offer{
 				{
@@ -239,7 +239,7 @@ func TestShop_Get(t *testing.T) {
 					PriceLessThan: 80000,
 				},
 			},
-			discounter: New(getRawLP()),
+			discounter: New(DefaultRulesLoyaltyProgram()),
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{

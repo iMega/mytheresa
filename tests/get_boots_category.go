@@ -36,13 +36,14 @@ var _ = Describe(`
 		err = json.NewDecoder(resp.Body).Decode(&actual)
 		Expect(err).NotTo(HaveOccurred())
 
+		discount30 := "30%"
 		expected := []handler.Offer{
 			{
 				SKU:      "000001",
 				Name:     "BV Lean leather ankle boots",
 				Category: "boots",
 				Price: handler.Price{
-					Original: 89000, Final: 62300, Currency: "EUR", Discount: "30%",
+					Original: 89000, Final: 62300, Currency: "EUR", Discount: &discount30,
 				},
 			},
 			{
@@ -50,7 +51,7 @@ var _ = Describe(`
 				Name:     "BV Lean leather ankle boots",
 				Category: "boots",
 				Price: handler.Price{
-					Currency: "EUR", Original: 99000, Final: 69300, Discount: "30%",
+					Currency: "EUR", Original: 99000, Final: 69300, Discount: &discount30,
 				},
 			},
 			{
@@ -58,7 +59,7 @@ var _ = Describe(`
 				Name:     "Ashlington leather ankle boots",
 				Category: "boots",
 				Price: handler.Price{
-					Currency: "EUR", Original: 71000, Final: 49700, Discount: "30%",
+					Currency: "EUR", Original: 71000, Final: 49700, Discount: &discount30,
 				},
 			},
 		}

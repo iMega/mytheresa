@@ -74,7 +74,7 @@ func (handler *Handler) Products(resp http.ResponseWriter, req *http.Request) {
 				Original: int(offer.Product.Price.Units),
 				Final:    int(offer.Final.Units),
 				Currency: offer.Product.Price.Currency,
-				Discount: offer.Discount,
+				Discount: nullString(offer.Discount),
 			},
 		}
 
@@ -90,6 +90,14 @@ func (handler *Handler) Products(resp http.ResponseWriter, req *http.Request) {
 
 		return
 	}
+}
+
+func nullString(value string) *string {
+	if value == "" {
+		return nil
+	}
+
+	return &value
 }
 
 func (handler *Handler) AddProduct(resp http.ResponseWriter, req *http.Request) {

@@ -8,8 +8,8 @@ type Offer struct {
 }
 
 type Price struct {
-	Original int    `json:"original"`
-	Final    int    `json:"final"`
-	Discount string `json:"discount_percentage"`
-	Currency string `json:"currency"`
+	Original int     `json:"original"`
+	Final    int     `json:"final"`
+	Discount *string `json:"discount_percentage"`
+	Currency string  `json:"currency"`
 }

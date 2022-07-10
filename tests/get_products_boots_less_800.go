@@ -37,13 +37,17 @@ var _ = Describe(`
 		err = json.NewDecoder(resp.Body).Decode(&actual)
 		Expect(err).NotTo(HaveOccurred())
 
+		discount30 := "30%"
 		expected := []handler.Offer{
 			{
 				SKU:      "000003",
 				Name:     "Ashlington leather ankle boots",
 				Category: "boots",
 				Price: handler.Price{
-					Currency: "EUR", Original: 71000, Final: 49700, Discount: "30%",
+					Currency: "EUR",
+					Original: 71000,
+					Final:    49700,
+					Discount: &discount30,
 				},
 			},
 		}

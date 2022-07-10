@@ -16,11 +16,12 @@ func TestShop_Get(t *testing.T) {
 	}
 
 	tests := []struct {
-		name       string
-		args       args
-		discounter domain.Discounter
-		want       [5]domain.Offer
-		wantErr    bool
+		name               string
+		args               args
+		discounter         domain.Discounter
+		item000003Category string
+		want               [5]domain.Offer
+		wantErr            bool
 	}{
 		{
 			name: "optimistic, get all products",
@@ -76,7 +77,7 @@ func TestShop_Get(t *testing.T) {
 		{
 			name:       "get all products and apply the discount",
 			args:       args{ctx: context.Background()},
-			discounter: &Discount{WithDiscount30: true, WithDiscount15: true},
+			discounter: New(getRawLP()),
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
@@ -155,7 +156,7 @@ func TestShop_Get(t *testing.T) {
 					PriceLessThan: 72000,
 				},
 			},
-			discounter: &Discount{WithDiscount30: true, WithDiscount15: true},
+			discounter: New(getRawLP()),
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
@@ -175,7 +176,7 @@ func TestShop_Get(t *testing.T) {
 				ctx: context.Background(),
 				req: domain.Request{Category: "boots"},
 			},
-			discounter: &Discount{WithDiscount30: true, WithDiscount15: true},
+			discounter: New(getRawLP()),
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
@@ -210,37 +211,19 @@ func TestShop_Get(t *testing.T) {
 			},
 		},
 		{
-			name: `The 30% discount does not apply to boots.
-		    The product with sku=000003 has a 15% discount`,
+			name: `The product with sku=000007 has a 15% discount`,
 			args: args{
 				ctx: context.Background(),
-				req: domain.Request{Category: "boots"},
+				req: domain.Request{Category: "otherCategory"},
 			},
-			discounter: &Discount{WithDiscount15: true},
+			discounter:         New(getRawLP()),
+			item000003Category: "otherCategory",
 			want: [5]domain.Offer{
-				{
-					Product: domain.Product{
-						SKU:      "000001",
-						Name:     "BV Lean leather ankle boots",
-						Category: "boots",
-						Price:    domain.Money{Currency: "EUR", Units: 89000},
-					},
-					Final: domain.Money{Currency: "EUR", Units: 89000},
-				},
-				{
-					Product: domain.Product{
-						SKU:      "000002",
-						Name:     "BV Lean leather ankle boots",
-						Category: "boots",
-						Price:    domain.Money{Currency: "EUR", Units: 99000},
-					},
-					Final: domain.Money{Currency: "EUR", Units: 99000},
-				},
 				{
 					Product: domain.Product{
 						SKU:      "000003",
 						Name:     "Ashlington leather ankle boots",
-						Category: "boots",
+						Category: "otherCategory",
 						Price:    domain.Money{Currency: "EUR", Units: 71000},
 					},
 					Final:    domain.Money{Currency: "EUR", Units: 60350},
@@ -256,7 +239,7 @@ func TestShop_Get(t *testing.T) {
 					PriceLessThan: 80000,
 				},
 			},
-			discounter: &Discount{WithDiscount30: true, WithDiscount15: true},
+			discounter: New(getRawLP()),
 			want: [5]domain.Offer{
 				{
 					Product: domain.Product{
@@ -292,7 +275,7 @@ func TestShop_Get(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			shop := shopInit(tt.discounter)
+			shop := shopInit(tt.discounter, tt.item000003Category)
 
 			got, err := shop.Get(tt.args.ctx, tt.args.req)
 			if (err != nil) != tt.wantErr {
@@ -305,7 +288,7 @@ func TestShop_Get(t *testing.T) {
 	}
 }
 
-func shopInit(discounter domain.Discounter) *Shop {
+func shopInit(discounter domain.Discounter, item000003Category string) *Shop {
 	ctx := context.Background()
 	store := storage.New()
 	shop := &Shop{Storage: store, Discounter: discounter}
@@ -324,10 +307,15 @@ func shopInit(discounter domain.Discounter) *Shop {
 		Price:    domain.Money{Currency: "EUR", Units: 99000},
 	})
 
+	category := "boots"
+	if item000003Category != "" {
+		category = item000003Category
+	}
+
 	shop.Add(ctx, domain.Product{
 		SKU:      "000003",
 		Name:     "Ashlington leather ankle boots",
-		Category: "boots",
+		Category: category,
 		Price:    domain.Money{Currency: "EUR", Units: 71000},
 	})
 

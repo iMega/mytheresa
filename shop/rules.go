@@ -1,5 +1,6 @@
 package shop
 
+// nolint: funlen,lll
 func DefaultRulesLoyaltyProgram() []byte {
 	return []byte(`{
         "ID": "4a191abe-9263-499c-8b72-98e81c9b32dd",

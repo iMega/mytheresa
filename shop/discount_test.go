@@ -22,7 +22,7 @@ func TestDiscount_Calc(t *testing.T) {
 	}{
 		{
 			name:   "given Category boots with discount of 30% will apply 30%",
-			fields: fields{Discounter: New(DefaultRulesLoyaltyProgram())},
+			fields: fields{Discounter: NewDiscounter(DefaultRulesLoyaltyProgram())},
 			args: args{product: domain.Product{
 				Category: "boots",
 				Price:    domain.Money{Units: 1000},
@@ -34,7 +34,7 @@ func TestDiscount_Calc(t *testing.T) {
 		},
 		{
 			name:   "given SKU 000003 with discount of 15% will apply 15%",
-			fields: fields{Discounter: New(DefaultRulesLoyaltyProgram())},
+			fields: fields{Discounter: NewDiscounter(DefaultRulesLoyaltyProgram())},
 			args: args{product: domain.Product{
 				Category: "sandals",
 				SKU:      "000003",
@@ -47,7 +47,7 @@ func TestDiscount_Calc(t *testing.T) {
 		},
 		{
 			name:   "given Category boots and SKU 000003 with highest discount of 30% and lowest 15% will apply 30%",
-			fields: fields{Discounter: New(DefaultRulesLoyaltyProgram())},
+			fields: fields{Discounter: NewDiscounter(DefaultRulesLoyaltyProgram())},
 			args: args{product: domain.Product{
 				Category: "boots",
 				SKU:      "000003",
@@ -60,7 +60,7 @@ func TestDiscount_Calc(t *testing.T) {
 		},
 		{
 			name:   "product sandals and SKU 000001 without applicable discount",
-			fields: fields{Discounter: New(DefaultRulesLoyaltyProgram())},
+			fields: fields{Discounter: NewDiscounter(DefaultRulesLoyaltyProgram())},
 			args: args{product: domain.Product{
 				Category: "sandals",
 				SKU:      "000001",

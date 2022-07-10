@@ -31,7 +31,7 @@ type Discount struct {
 	LP             loyaltyprogram.LoyaltyProgram
 }
 
-func New(rules []byte) *Discount {
+func NewDiscounter(rules []byte) *Discount {
 	lp := loyaltyprogram.LoyaltyProgram{}
 	if err := json.Unmarshal(rules, &lp); err != nil {
 		return nil

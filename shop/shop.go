@@ -13,6 +13,13 @@ type Shop struct {
 	Discounter domain.Discounter
 }
 
+func New(storage domain.Storage, discounter domain.Discounter) *Shop {
+	return &Shop{
+		Storage:    storage,
+		Discounter: discounter,
+	}
+}
+
 func (shop *Shop) Get(
 	ctx context.Context,
 	req domain.Request,

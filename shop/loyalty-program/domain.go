@@ -15,6 +15,7 @@
 package loyaltyprogram
 
 type ID string
+
 type NodeType string
 
 type Entity struct {

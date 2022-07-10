@@ -32,25 +32,26 @@ type LoyaltyProgram struct {
 	Tree     map[ID]map[ID]ID
 }
 
-func (lp *LoyaltyProgram) GetIdTopEntity() ID {
-	h := make(map[ID]struct{})
+func (lp *LoyaltyProgram) getIDTopEntity() ID {
+	tmp := make(map[ID]struct{})
+
 	for _, item := range lp.Tree {
 		for k, v := range item {
-			h[k] = struct{}{}
-			h[v] = struct{}{}
+			tmp[k] = struct{}{}
+			tmp[v] = struct{}{}
 		}
 	}
 
 	for key := range lp.Tree {
-		if _, ok := h[key]; !ok {
-			return ID(key)
+		if _, ok := tmp[key]; !ok {
+			return key
 		}
 	}
 
 	return ""
 }
 
-func (lp *LoyaltyProgram) GetEntity(id ID) (Entity, error) {
+func (lp *LoyaltyProgram) getEntity(id ID) (Entity, error) {
 	for _, e := range lp.Entities {
 		if e.ID == id {
 			return e, nil
@@ -60,32 +61,33 @@ func (lp *LoyaltyProgram) GetEntity(id ID) (Entity, error) {
 	return Entity{}, ErrNodeNotExist
 }
 
-func (lp *LoyaltyProgram) nextNode(nodeID ID, t NodeType) (Entity, error) {
+func (lp *LoyaltyProgram) nextNode(nodeID ID, nodeType NodeType) (Entity, error) {
 	for _, v := range lp.Tree[nodeID] {
-		e, err := lp.GetEntity(v)
+		entity, err := lp.getEntity(v)
 		if err != nil {
-			return Entity{}, fmt.Errorf("failed getting node, %s", err)
+			return Entity{}, fmt.Errorf("failed getting node, %w", err)
 		}
 
-		if e.Type == t {
-			return e, nil
+		if entity.Type == nodeType {
+			return entity, nil
 		}
 	}
 
 	return Entity{}, ErrNodeNotExist
 }
 
+// nolint: funlen,forcetypeassert,gomnd
 func (lp *LoyaltyProgram) DTree() (*dtree.Tree, error) {
-	t := []dtree.Tree{}
-	curID := lp.GetIdTopEntity()
+	tree := []dtree.Tree{}
+	curID := lp.getIDTopEntity()
 
-	e, err := lp.GetEntity(curID)
+	entity, err := lp.getEntity(curID)
 	if err != nil {
-		return nil, fmt.Errorf("failed getting node, %s", err)
+		return nil, fmt.Errorf("failed getting node, %w", err)
 	}
 
-	t = append(
-		t,
+	tree = append(
+		tree,
 		dtree.Tree{
 			ID:    1,
 			Order: 1,
@@ -94,47 +96,50 @@ func (lp *LoyaltyProgram) DTree() (*dtree.Tree, error) {
 			ID:       2,
 			Order:    2,
 			ParentID: 1,
-			Key:      e.Form.Fields["expression1"].(string),
-			Operator: e.Form.Fields["operator"].(string),
-			Value:    e.Form.Fields["expression2"],
+			Key:      entity.Form.Fields["expression1"].(string),
+			Operator: entity.Form.Fields["operator"].(string),
+			Value:    entity.Form.Fields["expression2"],
 		},
 	)
 
-	i := 2
+	num := 2
 	nType := Operation
-	for n, err := lp.nextNode(curID, Operation); err == nil; n, err = lp.nextNode(curID, nType) {
-		i++
+
+	for node, err := lp.nextNode(curID, Operation); err == nil; node, err = lp.nextNode(curID, nType) {
+		num++
+
 		if nType == Operation {
-			t = append(t, dtree.Tree{
-				ID:       i,
-				Order:    i,
-				ParentID: i - 1,
+			tree = append(tree, dtree.Tree{
+				ID:       num,
+				Order:    num,
+				ParentID: num - 1,
 				Key:      "result",
 				Operator: "expression",
-				Value:    n.Form.Fields["operation"],
-				Name:     n.Form.Fields["name"].(string),
+				Value:    node.Form.Fields["operation"],
+				Name:     node.Form.Fields["name"].(string),
 			})
 
-			i++
-			t = append(t, dtree.Tree{
-				ID:       i,
-				Order:    i,
-				ParentID: i - 1,
+			num++
+
+			tree = append(tree, dtree.Tree{
+				ID:       num,
+				Order:    num,
+				ParentID: num - 1,
 				Key:      "result",
 				Operator: "request2value",
 			})
 		}
 
 		if nType == Condition {
-			curID = n.ID
+			curID = node.ID
 
-			t = append(t, dtree.Tree{
-				ID:       i,
-				Order:    i,
+			tree = append(tree, dtree.Tree{
+				ID:       num,
+				Order:    num,
 				ParentID: 1,
-				Key:      n.Form.Fields["expression1"].(string),
-				Operator: n.Form.Fields["operator"].(string),
-				Value:    n.Form.Fields["expression2"],
+				Key:      node.Form.Fields["expression1"].(string),
+				Operator: node.Form.Fields["operator"].(string),
+				Value:    node.Form.Fields["expression2"],
 			})
 		}
 
@@ -145,5 +150,5 @@ func (lp *LoyaltyProgram) DTree() (*dtree.Tree, error) {
 		}
 	}
 
-	return dtree.CreateTree(t), nil
+	return dtree.CreateTree(tree), nil
 }

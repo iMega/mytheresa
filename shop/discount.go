@@ -59,18 +59,18 @@ func (d *Discount) Calc(product domain.Product) domain.Discount {
 		return noDiscount
 	}
 
-	v, ok := node.Value.(uint64)
+	value, ok := node.Value.(uint64)
 	if !ok {
 		return noDiscount
 	}
 
-	if v == 0 {
+	if value == 0 {
 		return noDiscount
 	}
 
 	return domain.Discount{
 		Price: domain.Money{
-			Units:    v,
+			Units:    value,
 			Currency: product.Price.Currency,
 		},
 		Value: node.Name,
@@ -83,12 +83,12 @@ func calc(
 ) (*dtree.Tree, error) {
 	tree, err := lp.DTree()
 	if err != nil {
-		return nil, fmt.Errorf("failed to create tree, %s", err)
+		return nil, fmt.Errorf("failed to create tree, %w", err)
 	}
 
 	varsJSON, err := json.Marshal(vars)
 	if err != nil {
-		return nil, fmt.Errorf("failed to marshal vars, %s", err)
+		return nil, fmt.Errorf("failed to marshal vars, %w", err)
 	}
 
 	node, err := tree.ResolveJSON(varsJSON, func(o *dtree.TreeOptions) {
@@ -97,11 +97,16 @@ func calc(
 		o.Operators["request2value"] = request2value
 	})
 	if err != nil {
-		return nil, fmt.Errorf("failed to resolve tree, %s", err)
+		return nil, fmt.Errorf("failed to resolve tree, %w", err)
 	}
 
 	return node, nil
 }
+
+const (
+	base10 = 10
+	bit64  = 64
+)
 
 func expression(
 	requests map[string]interface{},
@@ -109,16 +114,16 @@ func expression(
 ) (*dtree.Tree, error) {
 	expression, err := govaluate.NewEvaluableExpression(node.Value.(string))
 	if err != nil {
-		return nil, fmt.Errorf("failed to initial expression, %s", err)
+		return nil, fmt.Errorf("failed to initial expression, %w", err)
 	}
 
 	result, err := expression.Evaluate(requests)
 	if err != nil {
-		return nil, fmt.Errorf("failed to evaluate expression, %s", err)
+		return nil, fmt.Errorf("failed to evaluate expression, %w", err)
 	}
 
 	s := fmt.Sprintf("%.0f", result)
-	val, _ := strconv.ParseUint(s, 10, 64)
+	val, _ := strconv.ParseUint(s, base10, bit64)
 
 	requests[node.Key] = val
 	requests["name"] = node.Name
@@ -131,7 +136,10 @@ func request2value(
 	node *dtree.Tree,
 ) (*dtree.Tree, error) {
 	node.Value = requests[node.Key]
-	node.Name = requests["name"].(string)
+
+	if v, ok := requests["name"].(string); ok {
+		node.Name = v
+	}
 
 	return node, nil
 }

@@ -7,3 +7,9 @@ Run tests with 1 command, no network or file system required.
 ```
 $ make test
 ```
+
+### Run acceptance tests
+
+```
+$ make acceptance
+```
